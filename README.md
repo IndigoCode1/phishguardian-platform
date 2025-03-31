@@ -1,4 +1,4 @@
-PhishGuardian is an open-source, AI-powered phishing simulation platform designed specifically for small businesses (SMBs). It leverages generative AI to create realistic phishing emails, allowing organizations to train their employees, track responses, and improve overall cybersecurity awareness in a safe, controlled environment.
+PhishGuardian is an open-source, AI-powered phishing simulation platform designed specifically for small businesses. It leverages generative AI to create realistic phishing emails, allowing organizations to train their employees, track responses, and improve overall cybersecurity awareness in a safe, controlled environment.
 Features (Current Demo State):
 *   **AI-Generated Phishing Emails:** Utilizes OpenAI's API (GPT-4o) to automatically generate realistic email subjects and bodies based on user-defined scenarios.
 *   **Campaign Management API:** Backend endpoints to create campaigns (defining scenario, recipients) and trigger email sending.
