@@ -24,7 +24,7 @@ def send_email(recipient_email, subject, body):
 
     try:
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        # NOTE: Real SMTP servers might need TLS/Auth. Uncomment below to use
+        # NOTE: Real SMTP servers need TLS/Auth. Uncomment below to use
         # if SMTP_USER and SMTP_PASSWORD:
         #     server.starttls()
         #     server.ehlo()

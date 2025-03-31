@@ -37,8 +37,9 @@ def generate_phishing_email_content(prompt, recipient_name):
         return {"subject": subject, "body": body}
 
     except Exception as e:
+        # Fallback for OpenAI API error
         print(f"OpenAI API error: {e}")
-        subject = "Urgent Action Required [Fallback]"
+        subject = "Urgent Action Required"
         body = (
             f"Dear {recipient_name},\n\n"
             "Issue detected with your account. Please click below to verify.\n\n"
