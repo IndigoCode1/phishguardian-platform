@@ -1,0 +1,60 @@
+# Top-level version is obsolete but harmless
+# version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-phishing
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password # Use secrets/env vars in production
+      MYSQL_DATABASE: phishing_db
+      MYSQL_USER: phishing_user
+      MYSQL_PASSWORD: password # Use secrets/env vars in production
+    ports:
+      - "127.0.0.1:3306:3306" # Expose only to host machine for security
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Initialize DB schema
+    networks:
+      - phishing-net
+
+  backend:
+    build: ./backend # Build context is the backend directory
+    container_name: backend-phishing
+    restart: always
+    ports:
+      - "5000:5000" # Map host port 5000 to container port 5000
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: phishing_user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: phishing_db
+      MYSQL_PORT: 3306
+      OPENAI_API_KEY: ${OPENAI_API_KEY} # Read from .env file on host
+      SMTP_SERVER: "mailhog"
+      SMTP_PORT: 1025
+      BASE_URL: "http://localhost:5000"
+      FLASK_DEBUG: 1 # Enable debug mode (remove in production)
+    volumes:
+      - ./backend:/app # Mount local backend code for live development updates
+    depends_on:
+      - mysql # Ensure mysql starts before backend
+    networks:
+      - phishing-net
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog-phishing
+    ports:
+      - "1025:1025" # SMTP port
+      - "8025:8025" # Web UI port
+    networks:
+      - phishing-net
+
+volumes:
+  mysql-data: # Persists MySQL data
+
+networks:
+  phishing-net: # Custom network for services to communicate
+    driver: bridge

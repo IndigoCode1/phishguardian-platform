@@ -1,0 +1,83 @@
+<!-- backend/templates/admin_dashboard.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body { font-family: sans-serif; padding: 20px; }
+      #reportChartContainer { max-width: 600px; margin-top: 20px; }
+    </style>
+  </head>
+  <body>
+    <h1>Campaign Report for Campaign ID: {{ campaign_id }}</h1>
+
+    {% if report and report.total_recipients != 'N/A' %}
+      <p>Total Recipients: {{ report.total_recipients }}</p>
+      <p>Total Clicks: {{ report.total_clicks }}</p>
+      <p>Total Submissions: {{ report.total_submissions }}</p>
+      <p>Click Rate: {{ report.click_rate }}%</p>
+      <p>Submission Rate: {{ report.submission_rate }}%</p>
+
+      <div id="reportChartContainer">
+          <canvas id="reportChart"></canvas>
+      </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          const ctx = document.getElementById('reportChart');
+          if (ctx) {
+            const context = ctx.getContext('2d');
+            const reportData = {
+              labels: ['Recipients', 'Clicks', 'Submissions'],
+              datasets: [{
+                label: 'Campaign Stats',
+                data: [
+                  Number({{ report.total_recipients | default(0) }}),
+                  Number({{ report.total_clicks | default(0) }}),
+                  Number({{ report.total_submissions | default(0) }})
+                ],
+                backgroundColor: [
+                  'rgba(54, 162, 235, 0.6)',
+                  'rgba(255, 99, 132, 0.6)',
+                  'rgba(255, 206, 86, 0.6)'
+                ],
+                borderColor: [
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+              }]
+            };
+
+            const reportChart = new Chart(context, {
+              type: 'bar',
+              data: reportData,
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                  }
+                },
+                plugins: {
+                  legend: { position: 'top' },
+                  title: { display: true, text: 'Campaign Performance Overview' }
+                }
+              }
+            });
+          } else {
+            console.error('Could not find canvas element with ID "reportChart"');
+          }
+        });
+      </script>
+
+    {% else %}
+      <p>No valid report data found for Campaign ID: {{ campaign_id }}</p>
+    {% endif %}
+
+  </body>
+</html>

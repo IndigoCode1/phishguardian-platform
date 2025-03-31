@@ -1,0 +1,23 @@
+<!-- backend/templates/submission_error.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Submission Error</title>
+     <style>
+      body { font-family: Arial, sans-serif; background-color: #fdd; padding: 20px; }
+      .container { max-width: 500px; margin: 40px auto; padding: 20px; background: white; border: 1px solid #d00; border-radius: 8px; text-align: center; }
+      h2 { color: #d00; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Error</h2>
+      <p>Sorry, there was an error processing your submission.</p>
+      {% if error_message %}
+        <p>Details: {{ error_message }}</p>
+      {% endif %}
+      <p>Please close this window.</p>
+    </div>
+  </body>
+</html>
